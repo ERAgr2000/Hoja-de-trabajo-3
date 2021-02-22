@@ -12,9 +12,13 @@ Referencias:
 	https://www.geeksforgeeks.org/quick-sort/
 	
 */
-
+import java.io.*; 
 import java.util.ArrayList; 
 import java.util.Arrays;
+import java.util.*; 
+import java.nio.charset.StandardCharsets; 
+import java.nio.file.*; 
+import java.io.File; 
 
 public class Main{
 	
@@ -28,6 +32,7 @@ public class Main{
 			int i = 0;
 			int size = lista_ordenar.length;
 			
+			//De esta forma se compara los objetos T para su ordenamiento y se repite la secuencia hasta llegar al ultimo dato. 
 			while(i < size-1 ){
 				if( lista_ordenar[i].compareTo(lista_ordenar[i+1]) > 0 ){
 					T temp = lista_ordenar[i+1];
@@ -41,7 +46,7 @@ public class Main{
 					i++;
 				}
 			}
-			
+			//Convercion de T[] haci una ArrayList.
 			ArrayList<T> lista_ordenada = new ArrayList<>(Arrays.asList(lista_ordenar));
 			
 			return lista_ordenada;
@@ -62,31 +67,31 @@ public class Main{
 			return lista_ordenada;
 		}
 		
-		// Merges two subarrays of arr[].
-		// First subarray is arr[l..m]
-		// Second subarray is arr[m+1..r]
+		// Junto dos subarrays de arr[].
+		// Priemr subarray es arr[l..m]
+		// segundo subarray es arr[m+1..r]
 		static <T extends Comparable<T> > void merge(T[] arr, int l, int m, int r)
 		{
-			// Find sizes of two subarrays to be merged
+			//Buscar el tamano de dos subarrays para su posterior mezcla
 			int n1 = m - l + 1;
 			int n2 = r - m;
 
-			/* Create temp arrays */
+			/* Crear arrays temporales */
 			ArrayList<T> L = new ArrayList<>();
 			ArrayList<T> R = new ArrayList<>();
 
-			/*Copy data to temp arrays*/
+			/*Copiar datos del array*/
 			for (int i = 0; i < n1; ++i)
 				L.add(arr[l + i]);
 			for (int j = 0; j < n2; ++j)
 				R.add(arr[m + 1 + j]);
 
-			/* Merge the temp arrays */
+			/* juntar los arrays temp */
 
-			// Initial indexes of first and second subarrays
+			// Indices iniciales 
 			int i = 0, j = 0;
 
-			// Initial index of merged subarry array
+			//Indice inicial para la mezcla
 			int k = l;
 			while (i < n1 && j < n2) {
 				if (L.get(i).compareTo(R.get(j)) <= 0) {
@@ -100,14 +105,14 @@ public class Main{
 				k++;
 			}
 
-			/* Copy remaining elements of L[] if any */
+			/* COpiar los elementos restantes*/
 			while (i < n1) {
 				arr[k] = L.get(i);
 				i++;
 				k++;
 			}
 
-			/* Copy remaining elements of R[] if any */
+			
 			while (j < n2) {
 				arr[k] = R.get(j);
 				j++;
@@ -115,8 +120,7 @@ public class Main{
 			}
 		}
 
-		// Main function that sorts arr[l..r] using
-		// merge()
+		//funcion principal arr[l..r]
 		static < T extends Comparable<T> > void sortMerge(T[] arr, int l, int r)
 		{
 			if (l < r) {
@@ -150,22 +154,22 @@ public class Main{
 		static  <T extends Comparable<T> > int partition(T[] arr, int low, int high) 
 		{ 
 			T pivot = arr[high]; 
-			int i = (low-1); // index of smaller element 
+			int i = (low-1); // indice del elemento principal 
 			for (int j=low; j<high; j++) 
 			{ 
-				// If current element is smaller than the pivot 
+				// si es menor que el pivot 
 				if (arr[j].compareTo(pivot) < 0) 
 				{ 
 					i++; 
 
-					// swap arr[i] and arr[j] 
+					// cmabiamos 
 					T temp = arr[i]; 
 					arr[i] = arr[j]; 
 					arr[j] = temp; 
 				} 
 			} 
 
-			// swap arr[i+1] and arr[high] (or pivot) 
+			// cambiar arr[i+1] y arr[high] (o pivot) 
 			T temp = arr[i+1]; 
 			arr[i+1] = arr[high]; 
 			arr[high] = temp; 
@@ -174,11 +178,8 @@ public class Main{
 		} 
 
 
-		/* The main function that implements QuickSort() 
-		arr[] --> Array to be sorted, 
-		low --> Starting index, 
-		high --> Ending index */
-		
+		/* funcion principal para el quick sort 
+		 */
 		static <T extends Comparable<T> > void sort(T[] arr, int low, int high) 
 		{ 
 			if (low < high) 
@@ -186,8 +187,8 @@ public class Main{
 				
 				int pi = partition(arr, low, high); 
 
-				// Recursively sort elements before 
-				// partition and after partition 
+				// ordenamiento recursuvo previo a la 
+				//particion y despues de la misma
 				sort(arr, low, pi-1); 
 				sort(arr, pi+1, high); 
 			} 
@@ -206,8 +207,7 @@ public class Main{
 			return mx; 
 		} 
 
-		// A function to do counting sort of arr[] according to 
-		// the digit represented by exp. 
+		// una funcion para el ordenamiento 
 		static void countSort(int arr[], int n, int exp) 
 		{ 
 			int output[] = new int[n]; // output array 
@@ -215,23 +215,20 @@ public class Main{
 			int count[] = new int[10]; 
 			Arrays.fill(count, 0); 
 
-			// Store count of occurrences in count[] 
+			// guarda las ocurrencias  
 			for (i = 0; i < n; i++) 
 				count[(arr[i] / exp) % 10]++; 
 
-			// Change count[i] so that count[i] now contains 
-			// actual position of this digit in output[] 
+			
 			for (i = 1; i < 10; i++) 
 				count[i] += count[i - 1]; 
 
-			// Build the output array 
+			// construye el array de devolucion
 			for (i = n - 1; i >= 0; i--) { 
 				output[count[(arr[i] / exp) % 10] - 1] = arr[i]; 
 				count[(arr[i] / exp) % 10]--; 
 			} 
 
-			// Copy the output array to arr[], so that arr[] now 
-			// contains sorted numbers according to curent digit 
 			for (i = 0; i < n; i++) 
 				arr[i] = output[i]; 
 		} 
@@ -257,8 +254,7 @@ public class Main{
 				
 				int n = lista_ordenar.length;
 				
-				radixsort(lista_ordenar, n);
-				print(lista_ordenar, n); 
+				radixsort(lista_ordenar, n); 
 				return lista_ordenar;
 			}
 			catch(Exception e) {
@@ -295,14 +291,193 @@ public class Main{
 			return lista_ordenada;
 		}
 		
-	}
 	
-	public static void main(String args[]) 
+	
+		public static String readFileAsString(String fileName)throws Exception 
+		{ 
+			String data = ""; 
+			data = new String(Files.readAllBytes(Paths.get(fileName))); 
+			return data; 
+		}
+
+		//Para contar el tiempo de ordenar
+		public static < T extends Comparable<T> > long[] time_sorts_quick(T[] lista_ordenar){
+			long startTimeUn = System.nanoTime();
+			quick(lista_ordenar);
+			long elapsedTimeUn = System.nanoTime() - startTimeUn;
+			
+			long startTime = System.nanoTime();
+			quick(lista_ordenar);
+			long elapsedTime = System.nanoTime() - startTime;
+			
+			long[] tiempo = {elapsedTimeUn, elapsedTime};
+			return tiempo;
+		}
+		
+		public static < T extends Comparable<T> > long[] time_sorts_merge(T[] lista_ordenar){
+			long startTimeUn = System.nanoTime();
+			merge(lista_ordenar);
+			long elapsedTimeUn = System.nanoTime() - startTimeUn;
+			
+			long startTime = System.nanoTime();
+			merge(lista_ordenar);
+			long elapsedTime = System.nanoTime() - startTime;
+			
+			long[] tiempo = {elapsedTimeUn, elapsedTime};
+			return tiempo;
+		}
+		
+		public static < T extends Comparable<T> > long[] time_sorts_bubble(T[] lista_ordenar){
+			long startTimeUn = System.nanoTime();
+			bubble(lista_ordenar);
+			long elapsedTimeUn = System.nanoTime() - startTimeUn;
+			
+			long startTime = System.nanoTime();
+			bubble(lista_ordenar);
+			long elapsedTime = System.nanoTime() - startTime;
+			
+			long[] tiempo = {elapsedTimeUn, elapsedTime};
+			return tiempo;
+		}
+		
+		public static < T extends Comparable<T> > long[] time_sorts_gnome(T[] lista_ordenar){
+			long startTimeUn = System.nanoTime();
+			gnome(lista_ordenar);
+			long elapsedTimeUn = System.nanoTime() - startTimeUn;
+			
+			long startTime = System.nanoTime();
+			gnome(lista_ordenar);
+			long elapsedTime = System.nanoTime() - startTime;
+			
+			long[] tiempo = {elapsedTimeUn, elapsedTime};
+			return tiempo;
+		}
+		
+		public static long[] time_sorts_radix(int[] lista_ordenar){
+			long startTimeUn = System.nanoTime();
+			radix(lista_ordenar);
+			long elapsedTimeUn = System.nanoTime() - startTimeUn;
+			
+			long startTime = System.nanoTime();
+			radix(lista_ordenar);
+			long elapsedTime = System.nanoTime() - startTime;
+			
+			long[] tiempo = {elapsedTimeUn, elapsedTime};
+			return tiempo;
+		}
+		
+		
+	}
+
+	public static void main(String args[]) throws IOException
 	{
-		Integer[] orden = {2,4,3,1};
-		Integer[] orden2 = {2,4,3,1,10,9,7,8,6,100,99,1,3};
-		System.out.print(SortM.<Integer>merge(orden2));
+		
+		//Integer[] orden = {2,4,3,1};
+		//Integer[] orden2 = {2,4,3,1,10,9,7,8,6,100,99,1,3};
+		//System.out.print(SortM.<Integer>merge(orden2));
+		try{
+			
+			String data = SortM.readFileAsString("myfile.txt");	
+			
+			String[] numbers_list_str = data.split(",");
+			
+			int size = numbers_list_str.length;
+			
+			String times = "";
+			for(int j=10; j<3001; j++){
 				
+				Integer[] numbers_list = new Integer[j];
+				
+				for(int i=0; i<j; i++) {
+					numbers_list[i] = Integer.parseInt(numbers_list_str[i]);
+					
+				}
+				
+				long[] a = SortM.<Integer>time_sorts_quick(numbers_list);
+				times = times + a[0] + "," + a[1] + "\n";
+			}
+			
+			FileWriter myWriter = new FileWriter("quick.csv");
+			myWriter.write(times);
+			myWriter.close();
+			times = "";
+			
+			for(int j=10; j<3001; j++){
+				
+				Integer[] numbers_list = new Integer[j];
+				
+				for(int i=0; i<j; i++) {
+					numbers_list[i] = Integer.parseInt(numbers_list_str[i]);
+				}
+				
+				long[] a = SortM.<Integer>time_sorts_bubble(numbers_list);
+				times = times + a[0] + "," + a[1] + "\n";
+			}
+			
+			FileWriter myWriterB = new FileWriter("bubble.csv");
+			myWriterB.write(times);
+			myWriterB.close();
+			times = "";
+			
+			
+			for(int j=10; j<3001; j++){
+				
+				Integer[] numbers_list = new Integer[j];
+				int[] numbers_list_radix = new int[j];
+				
+				for(int i=0; i<j; i++) {
+					numbers_list[i] = Integer.parseInt(numbers_list_str[i]);
+				}
+				
+				long[] a = SortM.<Integer>time_sorts_merge(numbers_list);
+				times = times+ a[0] + "," + a[1] + "\n";
+			}
+			
+			FileWriter myWriterM = new FileWriter("merge.csv");
+			myWriterM.write(times);
+			myWriterM.close();
+			times = "";
+			
+			
+			for(int j=10; j<3001; j++){
+				
+				Integer[] numbers_list = new Integer[j];
+				int[] numbers_list_radix = new int[j];
+				
+				for(int i=0; i<j; i++) {
+					numbers_list[i] = Integer.parseInt(numbers_list_str[i]);
+				}
+				
+				long[] a = SortM.<Integer>time_sorts_gnome(numbers_list);
+				times = times + a[0] + "," + a[1] + "\n";
+			}
+			
+			FileWriter myWriterG = new FileWriter("gnome.csv");
+			myWriterG.write(times);
+			myWriterG.close();
+			times = "";
+			
+			for(int j=10; j<3001; j++){
+				
+				int[] numbers_list_radix = new int[j];
+				
+				for(int i=0; i<j; i++) {
+					numbers_list_radix[i] = Integer.parseInt(numbers_list_str[i]);
+					
+				}
+				
+				long[] a = SortM.<Integer>time_sorts_radix(numbers_list_radix);
+				times = times + a[0] + "," + a[1] + "\n";
+			}
+			
+			FileWriter myWriterR = new FileWriter("radix.csv");
+			myWriterR.write(times);
+			myWriterR.close();
+		}
+		catch(Exception e){
+			System.out.print(e);
+		}
+		
 	}
 
 }
